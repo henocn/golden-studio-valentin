@@ -101,19 +101,15 @@ export default function RevealPhase({
     // Top heart
     drawHeart(ctx, W / 2, 130, 36, '#e11d48')
 
-    // Title
-    ctx.font = 'italic 22px Georgia, serif'
-    ctx.fillStyle = '#be123c'
-    ctx.textAlign = 'center'
-    ctx.fillText('Studio Valentin', W / 2, 210)
-
-    // Line under title
-    ctx.beginPath()
-    ctx.moveTo(240, 235)
-    ctx.lineTo(560, 235)
-    ctx.strokeStyle = '#e11d4830'
-    ctx.lineWidth = 1
-    ctx.stroke()
+    // Logo + separator drawn after image loads (or fallback)
+    const drawRest = () => {
+      // Line under logo/title
+      ctx.beginPath()
+      ctx.moveTo(240, 235)
+      ctx.lineTo(560, 235)
+      ctx.strokeStyle = '#e11d4830'
+      ctx.lineWidth = 1
+      ctx.stroke()
 
     // Opening guillemet
     ctx.font = '100px Georgia, serif'
@@ -179,7 +175,7 @@ export default function RevealPhase({
 
     ctx.font = 'italic 14px Georgia, serif'
     ctx.fillStyle = '#be123c70'
-    ctx.fillText('\u00C9dit\u00E9 avec amour', W / 2, H - 100)
+    ctx.fillText('Henoc Dev', W / 2, H - 100)
 
     // Trigger download
     const a = document.createElement('a')
@@ -188,6 +184,25 @@ export default function RevealPhase({
     document.body.appendChild(a)
     a.click()
     document.body.removeChild(a)
+    } // end drawRest
+
+    // Load logo and draw
+    const logo = new Image()
+    logo.crossOrigin = 'anonymous'
+    logo.onload = () => {
+      const logoH = 50
+      const logoW = logo.width * (logoH / logo.height)
+      ctx.drawImage(logo, (W - logoW) / 2, 175, logoW, logoH)
+      drawRest()
+    }
+    logo.onerror = () => {
+      ctx.font = 'italic 22px Georgia, serif'
+      ctx.fillStyle = '#be123c'
+      ctx.textAlign = 'center'
+      ctx.fillText('Studio Valentin', W / 2, 210)
+      drawRest()
+    }
+    logo.src = '/logo.png'
   }
 
   return (
