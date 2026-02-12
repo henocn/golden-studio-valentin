@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { motion } from 'framer-motion'
+import { Heart, KeyRound, User } from 'lucide-react'
 
 export default function Login() {
   const [name, setName] = useState('')
@@ -38,30 +39,30 @@ export default function Login() {
     >
       <div className="glass-card p-8">
         <div className="text-center mb-8">
-          <span className="text-5xl animate-pulse-heart inline-block">💕</span>
+          <Heart className="w-12 h-12 mx-auto text-rose-500 fill-rose-500 animate-pulse-heart" />
           <h2 className="text-2xl font-bold mt-4 bg-linear-to-r from-rose-500 to-pink-500 bg-clip-text text-transparent">
             Connexion
           </h2>
-          <p className="text-gray-500 mt-2 text-sm">Content de te revoir !</p>
+          <p className="text-gray-500 mt-2 text-sm">Content de te revoir, beau gosse !</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">
-              Ton prénom
+            <label className="flex items-center gap-1.5 text-sm font-medium text-gray-700 mb-1.5">
+              <User className="w-4 h-4" /> Ton prénom
             </label>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
               className="input-field"
-              placeholder="Ex: Marie"
+              placeholder="Ex: Hadassa"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">
-              Code PIN
+            <label className="flex items-center gap-1.5 text-sm font-medium text-gray-700 mb-1.5">
+              <KeyRound className="w-4 h-4" /> Code PIN
             </label>
             <input
               type="password"

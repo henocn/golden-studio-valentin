@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { supabase } from '../lib/supabase'
 import { motion } from 'framer-motion'
+import { Mail, Sparkles, Rocket, Plus, LogIn } from 'lucide-react'
 
 function generateRoomCode() {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'
@@ -110,12 +111,12 @@ export default function Home() {
     >
       <div className="glass-card p-8">
         <div className="text-center mb-8">
-          <span className="text-5xl animate-pulse-heart inline-block">💌</span>
+          <Mail className="w-12 h-12 mx-auto text-rose-500" />
           <h2 className="text-2xl font-bold mt-4 bg-linear-to-r from-rose-500 to-pink-500 bg-clip-text text-transparent">
-            Bienvenue, {player.name} !
+            Salut {player.name} !
           </h2>
           <p className="text-gray-500 mt-2 text-sm">
-            Crée ou rejoins une partie
+            Crée une salle ou rejoins les autres
           </p>
         </div>
 
@@ -132,6 +133,7 @@ export default function Home() {
                 : 'bg-white/50 text-gray-500 hover:bg-white/70'
             }`}
           >
+            <Plus className="w-4 h-4 inline mr-1" />
             Créer une room
           </button>
           <button
@@ -145,6 +147,7 @@ export default function Home() {
                 : 'bg-white/50 text-gray-500 hover:bg-white/70'
             }`}
           >
+            <LogIn className="w-4 h-4 inline mr-1" />
             Rejoindre
           </button>
         </div>
@@ -175,9 +178,10 @@ export default function Home() {
             <button
               onClick={createRoom}
               disabled={loading}
-              className="btn-primary w-full"
+              className="btn-primary w-full flex items-center justify-center gap-2"
             >
-              {loading ? 'Création...' : '✨ Créer la partie'}
+              <Sparkles className="w-5 h-5" />
+              {loading ? 'Création...' : 'Créer la partie'}
             </button>
           </div>
         ) : (
@@ -199,9 +203,10 @@ export default function Home() {
             <button
               onClick={joinRoom}
               disabled={loading}
-              className="btn-primary w-full"
+              className="btn-primary w-full flex items-center justify-center gap-2"
             >
-              {loading ? 'Connexion...' : '🚀 Rejoindre la partie'}
+              <Rocket className="w-5 h-5" />
+              {loading ? 'Connexion...' : 'Rejoindre la partie'}
             </button>
           </div>
         )}

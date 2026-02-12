@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import { Drama, Target, Frown, ArrowRight, Trophy, Heart } from 'lucide-react'
 
 export default function RevealPhase({
   players,
@@ -32,14 +33,14 @@ export default function RevealPhase({
       className="glass-card p-8 w-full"
     >
       <div className="text-center mb-6">
-        <motion.span
+        <motion.div
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ type: 'spring', stiffness: 200, delay: 0.2 }}
-          className="text-5xl inline-block"
+          className="inline-block"
         >
-          🎭
-        </motion.span>
+          <Drama className="w-12 h-12 mx-auto text-rose-500" />
+        </motion.div>
         <h2 className="text-xl font-bold mt-3 text-gray-800">Révélation !</h2>
       </div>
 
@@ -70,11 +71,12 @@ export default function RevealPhase({
           transition={{ delay: 0.6 }}
           className="mt-4 p-4 bg-green-50 rounded-xl text-center"
         >
+          <Target className="w-6 h-6 mx-auto text-green-600 mb-1" />
           <p className="text-green-700 font-medium">
-            🎯 Bravo {correctVoterNames.join(', ')} !
+            Bien joué {correctVoterNames.join(', ')} !
           </p>
           <p className="text-sm text-green-600 mt-1">
-            +1 point pour avoir trouvé le bon auteur
+            +1 point pour avoir démasqué le coupable
           </p>
         </motion.div>
       ) : (
@@ -84,23 +86,31 @@ export default function RevealPhase({
           transition={{ delay: 0.6 }}
           className="mt-4 p-4 bg-amber-50 rounded-xl text-center"
         >
+          <Frown className="w-6 h-6 mx-auto text-amber-600 mb-1" />
           <p className="text-amber-700 font-medium">
-            😮 Personne n'a deviné !
+            Personne n'a trouvé ! Agent secret niveau max !
           </p>
         </motion.div>
       )}
 
-      <p className="text-center text-xs text-gray-400 mt-4">
+      <p className="text-center text-xs text-gray-400 mt-4 flex items-center justify-center gap-1">
+        <Heart className="w-3 h-3 text-rose-300 fill-rose-300" />
         {remaining > 0
           ? `${remaining} phrase${remaining > 1 ? 's' : ''} restante${remaining > 1 ? 's' : ''}`
-          : 'Dernière phrase !'}
+          : 'C\'était la dernière phrase !'}
       </p>
 
       {isAdmin && (
-        <button onClick={onNext} className="btn-primary w-full mt-4">
-          {remaining > 0
-            ? '➡️ Phrase suivante'
-            : '🏆 Voir le classement final'}
+        <button onClick={onNext} className="btn-primary w-full mt-4 flex items-center justify-center gap-2">
+          {remaining > 0 ? (
+            <>
+              <ArrowRight className="w-5 h-5" /> Phrase suivante
+            </>
+          ) : (
+            <>
+              <Trophy className="w-5 h-5" /> Classement final
+            </>
+          )}
         </button>
       )}
 
@@ -108,7 +118,7 @@ export default function RevealPhase({
         <div className="text-center mt-4 p-3 bg-rose-50/50 rounded-xl">
           <p className="text-sm text-gray-500">
             {remaining > 0
-              ? "L'admin passe à la phrase suivante..."
+              ? "L'admin passe à la suite..."
               : "L'admin va afficher le classement..."}
           </p>
         </div>

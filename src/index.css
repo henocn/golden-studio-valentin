@@ -97,3 +97,22 @@ body {
          focus:outline-none focus:border-rose-400 focus:ring-4 focus:ring-rose-100
          transition-all duration-200 placeholder:text-gray-400;
 }
+
+/* Hadassa watermark */
+@keyframes hadassa-fade {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 0.06; }
+}
+
+.hadassa-watermark::after {
+  content: 'H';
+  position: fixed;
+  bottom: 12px;
+  right: 16px;
+  font-size: 14px;
+  font-style: italic;
+  font-family: Georgia, serif;
+  color: #fda4af;
+  pointer-events: none;
+  animation: hadassa-fade 8s ease-in-out infinite;
+}

@@ -1,11 +1,26 @@
 import { useState } from 'react'
 import { supabase } from '../../lib/supabase'
 import { motion } from 'framer-motion'
+import { PenLine, Send, CheckCircle2, Clock, BookOpen } from 'lucide-react'
+
+const PLACEHOLDERS = [
+  "J'ai un crush inavouable sur...",
+  "Si j'étais un dessert, je serais...",
+  "Mon talent caché c'est de...",
+  "Le truc le plus gênant qui m'est arrivé...",
+  "Mon excuse bidon préférée c'est...",
+  "Si Hadassa me connaissait vraiment, elle saurait que...",
+  "Le pire date de ma vie c'était quand...",
+  "Mon péché mignon secret c'est...",
+]
 
 export default function WritingPhase({ room, player, players, phrases, isAdmin, onAdvance }) {
   const [text, setText] = useState('')
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [placeholder] = useState(
+    () => PLACEHOLDERS[Math.floor(Math.random() * PLACEHOLDERS.length)]
+  )
 
   const myPhrase = phrases.find((p) => p.player_id === player.id)
   const hasSubmitted = !!myPhrase || submitted
@@ -37,12 +52,12 @@ export default function WritingPhase({ room, player, players, phrases, isAdmin, 
       className="glass-card p-8 w-full"
     >
       <div className="text-center mb-6">
-        <span className="text-4xl">✍️</span>
+        <PenLine className="w-10 h-10 mx-auto text-rose-500" />
         <h2 className="text-xl font-bold mt-3 text-gray-800">
-          Écris ta phrase secrète
+          Balance ta phrase secrète
         </h2>
         <p className="text-sm text-gray-500 mt-1">
-          Écris quelque chose que les autres devront deviner !
+          Écris un truc que personne ne devinera... ou pas 😏
         </p>
       </div>
 
@@ -52,7 +67,7 @@ export default function WritingPhase({ room, player, players, phrases, isAdmin, 
             value={text}
             onChange={(e) => setText(e.target.value)}
             className="input-field min-h-30 resize-none"
-            placeholder="Ta phrase mystère..."
+            placeholder={placeholder}
             maxLength={200}
           />
           <div className="flex justify-between items-center">
@@ -60,18 +75,21 @@ export default function WritingPhase({ room, player, players, phrases, isAdmin, 
             <button
               onClick={handleSubmit}
               disabled={!text.trim() || loading}
-              className="btn-primary"
+              className="btn-primary flex items-center gap-2"
             >
-              {loading ? 'Envoi...' : '💌 Envoyer'}
+              <Send className="w-4 h-4" />
+              {loading ? 'Envoi...' : 'Envoyer'}
             </button>
           </div>
         </div>
       ) : (
         <div className="text-center p-6 bg-green-50 rounded-xl">
-          <span className="text-3xl">✅</span>
-          <p className="text-green-600 font-medium mt-2">Phrase envoyée !</p>
+          <CheckCircle2 className="w-10 h-10 mx-auto text-green-500" />
+          <p className="text-green-600 font-medium mt-2">
+            Message envoyé dans le secret des dieux !
+          </p>
           <p className="text-sm text-gray-500 mt-1">
-            En attente des autres joueurs...
+            On attend les autres... certains réfléchissent encore 🤔
           </p>
         </div>
       )}
@@ -96,7 +114,11 @@ export default function WritingPhase({ room, player, players, phrases, isAdmin, 
                       : 'bg-gray-50 text-gray-400'
                   }`}
                 >
-                  <span>{hasPhrase ? '✅' : '⏳'}</span>
+                  {hasPhrase ? (
+                    <CheckCircle2 className="w-4 h-4" />
+                  ) : (
+                    <Clock className="w-4 h-4" />
+                  )}
                   <span>{p.player?.name}</span>
                 </div>
               )
@@ -104,8 +126,8 @@ export default function WritingPhase({ room, player, players, phrases, isAdmin, 
           </div>
 
           {allSubmitted && (
-            <button onClick={onAdvance} className="btn-primary w-full mt-4">
-              📖 Passer à la lecture
+            <button onClick={onAdvance} className="btn-primary w-full mt-4 flex items-center justify-center gap-2">
+              <BookOpen className="w-5 h-5" /> On passe à la lecture !
             </button>
           )}
         </div>

@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import { Trophy } from 'lucide-react'
 
 export default function ScoreBar({ players, currentPlayerId }) {
   const sorted = [...players].sort((a, b) => (b.score || 0) - (a.score || 0))
@@ -10,8 +11,8 @@ export default function ScoreBar({ players, currentPlayerId }) {
       className="mb-4 bg-white/50 backdrop-blur-md rounded-xl p-3 border border-white/40"
     >
       <div className="flex items-center gap-3 overflow-x-auto pb-1">
-        <span className="text-xs font-semibold text-gray-500 whitespace-nowrap">
-          🏆 Scores
+        <span className="flex items-center gap-1 text-xs font-semibold text-gray-500 whitespace-nowrap">
+          <Trophy className="w-3.5 h-3.5" /> Scores
         </span>
         <div className="flex gap-2 flex-1">
           {sorted.map((p) => (

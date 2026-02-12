@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { supabase } from '../../lib/supabase'
 import { motion } from 'framer-motion'
+import { Vote, CheckCircle2, Clock, BarChart3, ThumbsUp } from 'lucide-react'
 
 export default function VotingPhase({
   room,
@@ -46,7 +47,7 @@ export default function VotingPhase({
       className="glass-card p-8 w-full"
     >
       <div className="text-center mb-6">
-        <span className="text-4xl">🗳️</span>
+        <Vote className="w-10 h-10 mx-auto text-rose-500" />
         <h2 className="text-xl font-bold mt-3 text-gray-800">Phase de vote</h2>
         <div className="bg-rose-50 rounded-xl p-3 mt-3">
           <p className="text-sm text-gray-700 italic">
@@ -54,56 +55,62 @@ export default function VotingPhase({
           </p>
         </div>
         <p className="text-sm text-gray-500 mt-3">
-          Qui a écrit cette phrase ? Vote pour ton suspect !
+          Désigne le coupable ! (oui, tu peux te dénoncer toi-même 🫣)
         </p>
       </div>
 
       {!alreadyVoted ? (
         <div className="space-y-3">
-          {players
-            .filter((p) => p.player_id !== player.id)
-            .map((p) => (
-              <motion.button
-                key={p.id}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => setSelectedId(p.player_id)}
-                className={`w-full flex items-center gap-3 p-4 rounded-xl transition-all cursor-pointer ${
+          {players.map((p) => (
+            <motion.button
+              key={p.id}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => setSelectedId(p.player_id)}
+              className={`w-full flex items-center gap-3 p-4 rounded-xl transition-all cursor-pointer ${
+                selectedId === p.player_id
+                  ? 'bg-rose-500 text-white shadow-lg shadow-rose-200'
+                  : 'bg-white/60 text-gray-700 hover:bg-white/80'
+              }`}
+            >
+              <div
+                className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold ${
                   selectedId === p.player_id
-                    ? 'bg-rose-500 text-white shadow-lg shadow-rose-200'
-                    : 'bg-white/60 text-gray-700 hover:bg-white/80'
+                    ? 'bg-white/30 text-white'
+                    : 'bg-linear-to-br from-rose-400 to-pink-400 text-white'
                 }`}
               >
-                <div
-                  className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold ${
-                    selectedId === p.player_id
-                      ? 'bg-white/30 text-white'
-                      : 'bg-linear-to-br from-rose-400 to-pink-400 text-white'
-                  }`}
-                >
-                  {p.player?.name?.charAt(0).toUpperCase()}
-                </div>
-                <span className="font-medium">{p.player?.name}</span>
-                {selectedId === p.player_id && (
-                  <span className="ml-auto">👆</span>
+                {p.player?.name?.charAt(0).toUpperCase()}
+              </div>
+              <span className="font-medium">
+                {p.player?.name}
+                {p.player_id === player.id && (
+                  <span className="text-xs ml-1.5 opacity-70">(moi)</span>
                 )}
-              </motion.button>
-            ))}
+              </span>
+              {selectedId === p.player_id && (
+                <ThumbsUp className="w-5 h-5 ml-auto" />
+              )}
+            </motion.button>
+          ))}
 
           <button
             onClick={handleVote}
             disabled={!selectedId || loading}
-            className="btn-primary w-full mt-4"
+            className="btn-primary w-full mt-4 flex items-center justify-center gap-2"
           >
-            {loading ? 'Envoi...' : '✅ Confirmer mon vote'}
+            <CheckCircle2 className="w-5 h-5" />
+            {loading ? 'Envoi...' : 'Confirmer mon vote'}
           </button>
         </div>
       ) : (
         <div className="text-center p-6 bg-green-50 rounded-xl">
-          <span className="text-3xl">✅</span>
-          <p className="text-green-600 font-medium mt-2">Vote enregistré !</p>
+          <CheckCircle2 className="w-10 h-10 mx-auto text-green-500" />
+          <p className="text-green-600 font-medium mt-2">
+            Vote enregistré, bien joué détective !
+          </p>
           <p className="text-sm text-gray-500 mt-1">
-            En attente des autres votes...
+            On attend les indécis...
           </p>
         </div>
       )}
@@ -126,7 +133,11 @@ export default function VotingPhase({
                       : 'bg-gray-50 text-gray-400'
                   }`}
                 >
-                  <span>{voted ? '✅' : '⏳'}</span>
+                  {voted ? (
+                    <CheckCircle2 className="w-4 h-4" />
+                  ) : (
+                    <Clock className="w-4 h-4" />
+                  )}
                   <span>{p.player?.name}</span>
                 </div>
               )
@@ -134,8 +145,8 @@ export default function VotingPhase({
           </div>
 
           {allVoted && (
-            <button onClick={onCloseVoting} className="btn-primary w-full mt-4">
-              📊 Voir les résultats
+            <button onClick={onCloseVoting} className="btn-primary w-full mt-4 flex items-center justify-center gap-2">
+              <BarChart3 className="w-5 h-5" /> Verdict !
             </button>
           )}
         </div>
