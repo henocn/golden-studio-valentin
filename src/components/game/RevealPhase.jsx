@@ -190,9 +190,9 @@ export default function RevealPhase({
     const logo = new Image()
     logo.crossOrigin = 'anonymous'
     logo.onload = () => {
-      const logoH = 50
+      const logoH = 80
       const logoW = logo.width * (logoH / logo.height)
-      ctx.drawImage(logo, (W - logoW) / 2, 175, logoW, logoH)
+      ctx.drawImage(logo, (W - logoW) / 2, 160, logoW, logoH)
       drawRest()
     }
     logo.onerror = () => {
