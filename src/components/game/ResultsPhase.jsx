@@ -25,6 +25,43 @@ export default function ResultsPhase({ players, votes, isAdmin, onReveal }) {
   ]
   const medalLabels = ['1er suspect', '2e suspect', '3e suspect']
 
+  const firstSuspectPhrases = [
+    "Je savais que c'est lui... mon intuition est toujours bonne 🎯",
+    "Je me demande pourquoi tant de personnes le suspectent... ah non en fait je sais 🤔",
+    "Et moi qui pensais qu'il ne pouvait pas dire cela... je dois réajuster mes pouvoirs de divination 🔮",
+    "Le suspect n°1 ! Même la voyante du quartier l'avait prédit",
+    "Si c'est vraiment lui, je deviens détective professionnel dès demain matin",
+    "Tout le monde l'a vu venir... sauf lui apparemment 😂",
+    "Le peuple a parlé, et le peuple a souvent raison... ou pas du tout",
+    "Son karma l'a rattrapé plus vite que prévu 💨",
+    "Champion du monde des suspects, médaille d'or assurée 🥇",
+    "Même avec un déguisement, on l'aurait reconnu",
+  ]
+
+  const otherSuspectPhrases = [
+    "Pas mal de gens pensent que c'est toi aussi... méfiance 👀",
+    "Tu es dans le viseur mais ça reste jouable pour toi",
+    "Suspect secondaire, mais ne te réjouis pas trop vite",
+    "On te surveille du coin de l'œil... discrètement",
+    "Tu pensais passer inaperçu ? Raté ! 😅",
+    "Les enquêteurs hésitent encore te concernant...",
+    "T'as failli passer sous le radar, presque !",
+    "Un soupçon plane... léger mais persistant comme un parfum",
+    "La rumeur court que c'est peut-être toi aussi 🏃",
+    "Ni innocent ni coupable... pour l'instant",
+  ]
+
+  const getSuspectPhrase = (index, playerId) => {
+    const arr = index === 0 ? firstSuspectPhrases : otherSuspectPhrases
+    let h = 0
+    const s = String(playerId)
+    for (let i = 0; i < s.length; i++) {
+      h = ((h << 5) - h) + s.charCodeAt(i)
+      h |= 0
+    }
+    return arr[Math.abs(h) % arr.length]
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -55,6 +92,7 @@ export default function ResultsPhase({ players, votes, isAdmin, onReveal }) {
             <div className="flex-1">
               <p className="font-bold text-gray-800">{p.player?.name}</p>
               <p className="text-xs text-gray-500">{medalLabels[i]}</p>
+              <p className="text-xs text-gray-400 italic mt-0.5">{getSuspectPhrase(i, p.player_id)}</p>
             </div>
             <div className="text-2xl font-bold text-rose-500">
               {p.voteCount}

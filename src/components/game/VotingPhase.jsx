@@ -20,6 +20,49 @@ export default function VotingPhase({
   const alreadyVoted = !!myVote || hasVoted
   const allVoted = votes.length >= players.length
 
+  const votingHints = [
+    "Tu peux voter celui-ci, il a un visage à dire ça 👀",
+    "Non il est pas trop du genre à dire ça...",
+    "Lui, les dés me disent qu'il est capable de le dire 🎲",
+    "Tu peux le voter mais ne dis à personne que je t'ai aidé à tricher 🤫",
+    "Son regard dit tout... ou rien du tout",
+    "Celui-là ? Il a l'air trop innocent pour être honnête",
+    "Mon sixième sens me dit que c'est peut-être lui...",
+    "L'intuition divine me souffle son nom 🌬️",
+    "Si c'est pas lui, je mange mon chapeau 🎩",
+    "Attention, voter pour lui c'est risqué... mais tentant",
+    "Il transpire la culpabilité... ou c'est juste la chaleur ?",
+    "Ce sourire en coin ne trompe personne 😏",
+    "Voter pour lui, c'est parier sur le favori",
+    "Il a le profil parfait du coupable romantique 💘",
+    "Lui ? Jamais de la vie... sauf si c'est lui",
+    "C'est le genre à écrire ça en rigolant tout seul",
+    "La police des phrases le surveille de près 🚔",
+    "Il nie sûrement en ce moment même...",
+    "Mon petit doigt me dit que c'est lui... mon gros doigt aussi 🤭",
+    "Choisis-le, tu auras au moins une bonne histoire à raconter",
+    "Franchement, ça lui ressemble trop pour être faux",
+    "Même sa mère le soupçonnerait sur ce coup-là 😂",
+    "Si tu votes pour lui et que t'as raison, t'es un génie",
+    "Il a cette tête de quelqu'un qui écrit des phrases comme ça",
+    "Le suspect parfait n'existe p... ah attends 👀",
+    "Regarde-le bien... tu vois ? Moi aussi je vois 🔍",
+    "Entre nous, c'est clairement son style d'écriture",
+    "Voter ici c'est un acte de bravoure, fonce !",
+    "Il faut du courage pour dénoncer... mais t'en as, non ?",
+    "Celui-ci ? Hmm, mes sources sont formelles 📰",
+  ]
+
+  const getHintIndex = (pid, phid, len) => {
+    let h = 0
+    const s = `${pid}-${phid}`
+    for (let i = 0; i < s.length; i++) {
+      h = ((h << 5) - h) + s.charCodeAt(i)
+      h |= 0
+    }
+    return Math.abs(h) % len
+  }
+
   const handleVote = async () => {
     if (!selectedId || loading) return
     setLoading(true)
@@ -82,14 +125,21 @@ export default function VotingPhase({
               >
                 {p.player?.name?.charAt(0).toUpperCase()}
               </div>
-              <span className="font-medium">
-                {p.player?.name}
-                {p.player_id === player.id && (
-                  <span className="text-xs ml-1.5 opacity-70">(moi)</span>
-                )}
-              </span>
+              <div className="flex-1 text-left min-w-0">
+                <span className="font-medium">
+                  {p.player?.name}
+                  {p.player_id === player.id && (
+                    <span className="text-xs ml-1.5 opacity-70">(moi)</span>
+                  )}
+                </span>
+                <p className={`text-xs mt-0.5 italic leading-tight ${
+                  selectedId === p.player_id ? 'text-white/70' : 'text-gray-400'
+                }`}>
+                  {votingHints[getHintIndex(p.player_id, currentPhrase?.id, votingHints.length)]}
+                </p>
+              </div>
               {selectedId === p.player_id && (
-                <ThumbsUp className="w-5 h-5 ml-auto" />
+                <ThumbsUp className="w-5 h-5 shrink-0" />
               )}
             </motion.button>
           ))}
