@@ -159,7 +159,7 @@ export default function Home() {
                 Nombre de joueurs (toi inclus)
               </label>
               <div className="flex gap-2">
-                {[3, 4, 5, 6, 7, 8].map((n) => (
+                {[5, 6, 7, 8, 9, 10].map((n) => (
                   <button
                     key={n}
                     onClick={() => setMaxPlayers(n)}
